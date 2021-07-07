@@ -35,7 +35,8 @@ class NoticeActivity : AppCompatActivity() {
         GlobalScope.launch(Dispatchers.IO) {
             //20개 가져옴
             try {
-                val jsoup = Jsoup.connect("http://school.busanedu.net/daesin-m/na/ntt/selectNttList.do?mi=618566&bbsId=1011229&&listCo=20").get()
+                val jsoup = Jsoup.connect("http://school.busanedu.net/daesin-m/na/ntt/selectNttList.do?mi=618566&bbsId=1011229")
+                        .data("listCo", "100").post()
                 val document = jsoup.select("tbody tr")
 
                 for (tr in document) {
@@ -45,7 +46,7 @@ class NoticeActivity : AppCompatActivity() {
                             date = tr.select("td:nth-child(4)").text(),
                             link = tr.select("a").attr("href"),
                             file = tr.select("img").hasAttr("src"),
-                            important = tr.select("b").text() == "공지"))
+                            announce = tr.select("b").text() == "공지"))
                 }
             } catch (e: UnknownHostException) {
                 runOnUiThread { Handler().postDelayed({parse()}, 1000) }

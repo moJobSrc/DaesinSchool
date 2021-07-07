@@ -28,7 +28,7 @@ class NoticeAdapater(private val noticeList: ArrayList<NoticeData>): RecyclerVie
                     notice_file.visibility = View.VISIBLE
                 else
                     notice_file.visibility = View.GONE
-                if (important)
+                if (announce)
                     noti_important.visibility = View.VISIBLE
                 else
                     noti_important.visibility = View.GONE

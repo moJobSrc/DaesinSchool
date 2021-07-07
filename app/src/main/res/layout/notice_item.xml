@@ -33,7 +33,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:text="중요"
+                    android:text="공지"
                     android:textColor="@color/white"
                     android:background="#d9534f"
                     android:layout_gravity="center"
