@@ -13,35 +13,49 @@ import androidx.recyclerview.widget.RecyclerView
 import com.daesin.school.R
 import kotlinx.android.synthetic.main.notice_item.view.*
 
-class NoticeAdapater(private val noticeList: ArrayList<NoticeData>): RecyclerView.Adapter<NoticeAdapater.CustomViewHolder>() {
+class NoticeAdapater : RecyclerView.Adapter<NoticeAdapater.NoticeViewHolder>() {
+    private val list =  ArrayList<NoticeData>()
 
-    inner class CustomViewHolder(itemView: ViewGroup): RecyclerView.ViewHolder(LayoutInflater.from(itemView.context).inflate(R.layout.notice_item, itemView, false))
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = CustomViewHolder(parent)
-
-    override fun getItemCount(): Int = noticeList.size
-
-    override fun onBindViewHolder(holder: NoticeAdapater.CustomViewHolder, position: Int) {
-        with(noticeList[position]) {
-            with(holder.itemView) {
-                if (file)
+    inner class NoticeViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
+        fun bind(data: NoticeData) {
+            with(itemView) {
+                if (data.file)
                     notice_file.visibility = View.VISIBLE
                 else
                     notice_file.visibility = View.GONE
-                if (announce)
-                    noti_important.visibility = View.VISIBLE
-                else
-                    noti_important.visibility = View.GONE
-                notice_title.text = title
-                notice_writer.text = writer
-                notice_date.text = date
+                notice_title.text = data.title
+                notice_writer.text = data.writer
+                notice_date.text = data.date
                 //웹창이동
                 notice.setOnClickListener {
-                    Log.d("Notice Intent", link)
-                    it.context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("http://school.busanedu.net${link}")))
+                    Log.d("Notice Intent", data.link)
+                    it.context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("http://school.busanedu.net${data.link}")))
                 }
             }
         }
+    }
+
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NoticeViewHolder {
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.notice_item, parent, false)
+
+        return NoticeViewHolder(view)
+    }
+
+    override fun getItemCount(): Int = list.size
+
+    override fun onBindViewHolder(holder: NoticeViewHolder, position: Int) {
+        holder.bind(list[position])
+    }
+
+    fun addList(items: ArrayList<NoticeData>) {
+        list.addAll(items)
+        notifyDataSetChanged()
+    }
+
+    fun clear() {
+        list.clear()
+        notifyDataSetChanged()
     }
 
 }

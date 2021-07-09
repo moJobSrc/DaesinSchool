@@ -33,12 +33,13 @@ class NoticeFragment : Fragment() {
             val document = jsoup.select("tbody tr")
             for (tr in document) {
                 //차례대로 제목, 작성자, 날짜, 첨부파일, 링크 확인
-                noticeList.add(NoticeData(title = tr.select("td:nth-child(2)").text(),
-                        writer = tr.select("td:nth-child(3)").text(),
-                        date = tr.select("td:nth-child(4)").text(),
-                        link = tr.select("a").attr("href"),
-                        file = tr.select("img").hasAttr("src"),
-                        announce = tr.select("td:nth-child(1)").text() == "공지"))
+                if (tr.select("b").text() != "공지") {
+                    noticeList.add(NoticeData(title = tr.select("td:nth-child(2)").text(),
+                            writer = tr.select("td:nth-child(3)").text(),
+                            date = tr.select("td:nth-child(4)").text(),
+                            link = tr.select("a").attr("href"),
+                            file = tr.select("img").hasAttr("src")))
+                }
             }
 
             /**코루틴 상태에서 바로 연결시켜버리면 에러뜸 쓰레드가 필요
@@ -46,7 +47,8 @@ class NoticeFragment : Fragment() {
              */
             activity?.runOnUiThread {
                 notice_view.layoutManager = LinearLayoutManager(requireContext())
-                notice_view.adapter = NoticeAdapater(noticeList)
+                //notice_view.adapter = NoticeAdapater()
+
                 noti_loading.visibility = View.GONE
                 notice_view.visibility = View.VISIBLE
             }
