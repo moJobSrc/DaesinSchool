@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">대신중학교</string>
     <string name="error_message">알 수 없는 오류가 발생하였습니다.</string>
+    <string name="error_request">요쳥에 실패하였습니다.</string>
     <string name="navigation_drawer_open">open navigation</string>
     <string name="navigation_drawer_close">close navigation</string>
     <string name="logo">대신중 로고</string>
