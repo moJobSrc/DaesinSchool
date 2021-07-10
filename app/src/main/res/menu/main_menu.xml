@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <item android:id="@+id/alarm"
-        android:icon="@drawable/ic_alarm"
-        android:title="공지사항"
+    <item android:id="@+id/account"
+        android:icon="@drawable/ic_login_24"
+        android:title="계정"
         app:showAsAction="always"/>
 </menu>
