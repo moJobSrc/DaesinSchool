@@ -155,15 +155,4 @@
         </LinearLayout>
     </LinearLayout>
 
-    <TextView
-        android:layout_marginBottom="10dp"
-        android:layout_marginLeft="30dp"
-        android:id="@+id/drawer_dateText"
-        android:layout_alignParentBottom="true"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="17dp"
-        android:text="2006년 04훨 11일"
-        android:textColor="#fff"
-        android:fontFamily="@font/gmarketnormal"/>
 </RelativeLayout>

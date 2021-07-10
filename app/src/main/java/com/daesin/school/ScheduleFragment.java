@@ -1,5 +1,6 @@
 package com.daesin.school;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -23,7 +24,7 @@ import java.io.IOException;
 
 public class ScheduleFragment extends Fragment {
     private static View view;
-
+    private Context mContext;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -63,7 +64,12 @@ public class ScheduleFragment extends Fragment {
         @Override
         protected void onPostExecute(Void aVoid) {
             PhotoView imageView = view.findViewById(R.id.scheduleFragment_imageView);
-            Glide.with(getContext()).load(imageUrl).into(imageView);
+            Glide.with(mContext).load(imageUrl).into(imageView);
         }
+    }
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mContext = context;
     }
 }
