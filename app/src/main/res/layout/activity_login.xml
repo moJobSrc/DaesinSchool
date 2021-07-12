@@ -10,29 +10,55 @@
 
     <include layout="@layout/actionbar" />
 
-    <EditText
-        android:id="@+id/id"
-        android:layout_marginTop="10dp"
-        android:padding="10dp"
+    <LinearLayout
+        android:id="@+id/loginForm"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="@color/black"
-        android:hint="아이디" />
+        android:orientation="vertical">
 
-    <EditText
-        android:id="@+id/pw"
-        android:layout_marginTop="10dp"
-        android:padding="10dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textColor="@color/black"
-        android:inputType="textPassword"
-        android:hint="비밀번호" />
-    
-    <Button
-        android:id="@+id/login"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="login"/>
+        <ImageView
+            android:layout_marginTop="20dp"
+            android:layout_width="140dp"
+            android:layout_height="140dp"
+            android:layout_gravity="center"
+            android:src="@drawable/dsj_logo1"/>
+
+        <EditText
+            android:id="@+id/id"
+            android:layout_marginTop="10dp"
+            android:padding="10dp"
+            android:layout_gravity="center"
+            android:layout_width="270dp"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:hint="아이디" />
+
+        <EditText
+            android:id="@+id/pw"
+            android:layout_marginTop="10dp"
+            android:padding="10dp"
+            android:layout_gravity="center"
+            android:layout_width="270dp"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:inputType="textPassword"
+            android:hint="비밀번호" />
+
+        <Button
+            android:id="@+id/login"
+            android:layout_marginTop="10dp"
+            android:layout_gravity="center"
+            android:layout_width="270dp"
+            android:layout_height="wrap_content"
+            android:text="LOGIN"
+            android:enabled="false"
+            android:clickable="true"
+            android:focusable="true"
+            android:textColor="@color/black"
+            android:fontFamily="@font/notosansmedium"
+            android:foreground="?attr/selectableItemBackground"
+            android:background="@drawable/bt_outline"/>
+
+    </LinearLayout>
 
 </LinearLayout>
