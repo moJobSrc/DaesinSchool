@@ -1,4 +1,4 @@
-package com.daesin.school.simpleNoti
+package com.daesin.school.homeNoti
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
