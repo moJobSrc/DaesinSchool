@@ -1,23 +1,19 @@
 package com.daesin.school
 
-import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.daesin.school.noticeAdapter.NoticeData
-import com.daesin.school.simpleNoti.NotiAdapater
-import com.daesin.school.simpleNoti.NotiData
+import com.daesin.school.homeNoti.NotiAdapater
+import com.daesin.school.homeNoti.NotiData
 import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.jsoup.Jsoup
-import kotlin.math.log
 
 class HomeFragment : Fragment() {
     //공지사항
