@@ -14,6 +14,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import okhttp3.*
 import org.json.JSONObject
+import org.jsoup.Jsoup
 import java.io.IOException
 import java.net.CookieManager
 import java.net.CookiePolicy
@@ -33,32 +34,38 @@ class LoginActivity : AppCompatActivity() {
             setDisplayShowHomeEnabled(false)
         }
 
+        if (App.prefs.getString("cookie") != App.prefs.DEFAULT_VALUE_STRING) {
+            GlobalScope.launch(Dispatchers.IO) {
+
+                //Log.d("Result", Jsoup.connect("https://school.busanedu.net/daesin-m/sb/sbscrb/selectSbscrbInfo.do").execute().cookie("JSESSIONID"))
+            }
+
+
+            val client = OkHttpClient()
+
+            val request = Request.Builder()
+                    .url("https://school.busanedu.net/daesin-m/sb/sbscrb/selectSbscrbInfo.do")
+                    //.header("Cookie", CookieManager().cookieStore.cookies)
+                    .build()
+
+            client.newCall(request).enqueue(object : Callback {
+                override fun onFailure(call: Call, e: IOException) {
+                    TODO("Not yet implemented")
+                }
+
+                override fun onResponse(call: Call, response: Response) {
+                    Log.d("tag", response.body!!.string())
+                    Log.d("Cookie", App.prefs.getString("cookie").toString())
+                    Log.d("header", response.headers.toString())
+                }
+
+            })
+
+        }
+
         login.setOnClickListener { login() }
-        id.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
-            override fun afterTextChanged(p0: Editable?) {}
 
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                if (p0!!.isEmpty() || pw.text.toString().isEmpty()) {
-                    buttonDisable()
-                } else if (p0.isNotEmpty() && pw.text.toString().isNotEmpty()) {
-                    buttonEnable()
-                }
-            }
-        })
-        pw.addTextChangedListener(object  : TextWatcher {
-            override fun afterTextChanged(p0: Editable?) {}
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
-
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                if (p0!!.isEmpty() || id.text.toString().isEmpty()) {
-                    buttonDisable()
-                } else if (p0.isNotEmpty() && id.text.toString().isNotEmpty()) {
-                    buttonEnable()
-                }
-            }
-
-        })
+        changeSetup()
 
     }
 
@@ -93,7 +100,9 @@ class LoginActivity : AppCompatActivity() {
         cookieManager.setCookiePolicy(CookiePolicy.ACCEPT_ALL)
         GlobalScope.launch(Dispatchers.IO) {
             //로그인 화면 쿠키 연동
-            client.newCall(Request.Builder().url("https://school.busanedu.net/daesin-m/lo/login/loginPage.do").build()).execute()
+            val cookie = client.newCall(Request.Builder().url("https://school.busanedu.net/daesin-m/lo/login/loginPage.do").build()).execute()
+
+            Log.d("Cookies", cookie.header("Set-Cookie", "")!!)
 
             // OkHttp Request 를 만들어준다.
             val request = Request.Builder()
@@ -101,7 +110,6 @@ class LoginActivity : AppCompatActivity() {
                     .post(requestBody)
                     .build()
 
-            Log.d("Cookies", cookieManager.cookieStore.cookies.toString())
             // 요청 전송
             client.newCall(request).enqueue(object : Callback {
 
@@ -127,7 +135,7 @@ class LoginActivity : AppCompatActivity() {
                             }
                             "NM","Y" -> {
                                 toast(R.string.loginSuccess)
-                                App.prefs.setString("cookie", cookieManager.cookieStore.cookies.toString())
+                                App.prefs.setString("cookie", cookie.header("Set-Cookie", ""))
                                 finish()
                             }
                         }
@@ -156,5 +164,33 @@ class LoginActivity : AppCompatActivity() {
         login.background = resources.getDrawable(R.color.colorPrimary)
         login.isEnabled =  true
         login.setTextColor(resources.getColor(R.color.white))
+    }
+
+    private fun changeSetup() {
+        id.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+            override fun afterTextChanged(p0: Editable?) {}
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                if (p0!!.isEmpty() || pw.text.toString().isEmpty()) {
+                    buttonDisable()
+                } else if (p0.isNotEmpty() && pw.text.toString().isNotEmpty()) {
+                    buttonEnable()
+                }
+            }
+        })
+        pw.addTextChangedListener(object  : TextWatcher {
+            override fun afterTextChanged(p0: Editable?) {}
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                if (p0!!.isEmpty() || id.text.toString().isEmpty()) {
+                    buttonDisable()
+                } else if (p0.isNotEmpty() && id.text.toString().isNotEmpty()) {
+                    buttonEnable()
+                }
+            }
+
+        })
     }
 }

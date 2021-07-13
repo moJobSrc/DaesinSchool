@@ -5,11 +5,11 @@ class PreferenceUtil(context: Context) {
 
     private val prefs: SharedPreferences = context.getSharedPreferences(context.packageName, Context.MODE_PRIVATE)
 
-    private val DEFAULT_VALUE_STRING = ""
-    private val DEFAULT_VALUE_BOOLEAN = false
-    private val DEFAULT_VALUE_INT = -1
-    private val DEFAULT_VALUE_LONG = -1L
-    private val DEFAULT_VALUE_FLOAT = -1f
+    val DEFAULT_VALUE_STRING = ""
+    val DEFAULT_VALUE_BOOLEAN = false
+    val DEFAULT_VALUE_INT = -1
+    val DEFAULT_VALUE_LONG = -1L
+    val DEFAULT_VALUE_FLOAT = -1f
 
     /**
      *
