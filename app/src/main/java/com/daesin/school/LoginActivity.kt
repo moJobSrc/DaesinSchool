@@ -36,7 +36,6 @@ class LoginActivity : AppCompatActivity() {
 
         if (App.prefs.getString("cookie") != App.prefs.DEFAULT_VALUE_STRING) {
             GlobalScope.launch(Dispatchers.IO) {
-
                 //Log.d("Result", Jsoup.connect("https://school.busanedu.net/daesin-m/sb/sbscrb/selectSbscrbInfo.do").execute().cookie("JSESSIONID"))
             }
 
