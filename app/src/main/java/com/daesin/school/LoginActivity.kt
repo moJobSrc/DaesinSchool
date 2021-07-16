@@ -7,6 +7,7 @@ import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.daesin.school.Util.App
+import com.daesin.school.Util.LoginUtil
 import kotlinx.android.synthetic.main.actionbar.*
 import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.coroutines.Dispatchers
@@ -34,123 +35,22 @@ class LoginActivity : AppCompatActivity() {
             setDisplayShowHomeEnabled(false)
         }
 
-        if (App.prefs.getString("cookie") != App.prefs.DEFAULT_VALUE_STRING) {
-            GlobalScope.launch(Dispatchers.IO) {
-                //Log.d("Result", Jsoup.connect("https://school.busanedu.net/daesin-m/sb/sbscrb/selectSbscrbInfo.do").execute().cookie("JSESSIONID"))
-            }
+        val cookieManager = CookieManager()
+        //Log.d("Cookie", App.cookieJar.loadForRequest(HttpUrl.get("ddd")).toString())
 
-
-            val client = OkHttpClient()
-
-            val request = Request.Builder()
-                    .url("https://school.busanedu.net/daesin-m/sb/sbscrb/selectSbscrbInfo.do")
-                    //.header("Cookie", CookieManager().cookieStore.cookies)
-                    .build()
-
-            client.newCall(request).enqueue(object : Callback {
-                override fun onFailure(call: Call, e: IOException) {
-                    TODO("Not yet implemented")
-                }
-
-                override fun onResponse(call: Call, response: Response) {
-                    Log.d("tag", response.body!!.string())
-                    Log.d("Cookie", App.prefs.getString("cookie").toString())
-                    Log.d("header", response.headers.toString())
-                }
-
-            })
-
+        login.setOnClickListener {
+            LoginUtil.login(id.text.toString(), pw.text.toString())
+            Log.d("Cookie", cookieManager.cookieStore.cookies.toString())
         }
-
-        login.setOnClickListener { login() }
 
         changeSetup()
 
     }
 
-    fun toast(message: String) {
-        runOnUiThread { Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show() }
-    }
+
 
     fun toast(res: Int) {
         runOnUiThread { Toast.makeText(applicationContext, res, Toast.LENGTH_SHORT).show() }
-    }
-
-    private fun login() {
-
-        // URL을 만들어 주고
-        val url = URL("https://school.busanedu.net/daesin-m/lo/login/login.do")
-
-        //데이터를 담아 보낼 바디를 만든다
-        //sysId=daesin-m&loginType=2&agreCnt=1&mberId=id&mberPassword=pw
-        val requestBody: RequestBody = FormBody.Builder()
-                .add("sysId", "daesin")
-                .add("loginType", "2")
-                .add("agreCnt", "1")
-                .add("mberId", id.text.toString())
-                .add("mberPassword", pw.text.toString())
-                .build()
-
-
-        val cookieManager = CookieManager()
-        // 클라이언트 생성
-        val client = OkHttpClient().newBuilder().cookieJar(JavaNetCookieJar(cookieManager)).build()
-
-        cookieManager.setCookiePolicy(CookiePolicy.ACCEPT_ALL)
-        GlobalScope.launch(Dispatchers.IO) {
-            //로그인 화면 쿠키 연동
-            val cookie = client.newCall(Request.Builder().url("https://school.busanedu.net/daesin-m/lo/login/loginPage.do").build()).execute()
-
-            Log.d("Cookies", cookie.header("Set-Cookie", "")!!)
-
-            // OkHttp Request 를 만들어준다.
-            val request = Request.Builder()
-                    .url(url)
-                    .post(requestBody)
-                    .build()
-
-            // 요청 전송
-            client.newCall(request).enqueue(object : Callback {
-
-                override fun onResponse(call: Call, response: Response) {
-                    val res = response.body!!.string()
-                    Log.d("Response", res)
-                    try {
-                        if (JSONObject(res).has("passwordFailrCoCheck") && JSONObject(res).getString("passwordFailrCoCheck") == "N") {
-                            toast("비밀번호 5회이상 실패")
-                        }
-                        when (JSONObject(res).getString("result")) {
-                            "N" -> {
-                                toast("로그인 실패")
-                            }
-                            "D" -> {
-                                toast("장기간 미접속및 개인정보 미동의로 삭제된회원입니다")
-                            }
-                            "C" -> {
-                                toast("본인인증이 필요합니다")
-                            }
-                            "W" -> {
-                                toast("승인 대기중입니다")
-                            }
-                            "NM","Y" -> {
-                                toast(R.string.loginSuccess)
-                                App.prefs.setString("cookie", cookie.header("Set-Cookie", ""))
-                                finish()
-                            }
-                        }
-                    } catch (e: Exception) {
-                        Log.d("Exception", e.message.toString())
-                    }
-
-                }
-
-                override fun onFailure(call: Call, e: IOException) {
-                    Toast.makeText(applicationContext, R.string.error_request, Toast.LENGTH_SHORT).show()
-                }
-
-            })
-
-        }
     }
 
     fun buttonDisable() {
