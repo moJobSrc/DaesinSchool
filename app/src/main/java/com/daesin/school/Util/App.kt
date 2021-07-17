@@ -12,6 +12,7 @@ class App : Application() {
     companion object {
         lateinit var prefs: PreferenceUtil
         lateinit var cookieJar: CookieJar
+        val MAIN_PAGE = "https://school.busanedu.net/daesin-m/lo/login/loginPage.do"
     }
 
     override fun onCreate() {
