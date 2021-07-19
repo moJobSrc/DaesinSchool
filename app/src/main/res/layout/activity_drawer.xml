@@ -8,7 +8,13 @@
     android:gravity="center_vertical"
     android:orientation="vertical"   >
 
+    <WebView
+        android:id="@+id/nav_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
     <LinearLayout
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="start"

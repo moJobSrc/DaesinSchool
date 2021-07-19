@@ -14,7 +14,8 @@
         android:id="@+id/loginForm"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:visibility="visible">
 
         <ImageView
             android:layout_marginTop="20dp"
@@ -31,7 +32,8 @@
             android:layout_width="270dp"
             android:layout_height="wrap_content"
             android:textColor="@color/black"
-            android:hint="아이디" />
+            android:hint="아이디"
+            android:backgroundTint="@color/colorAccent"/>
 
         <EditText
             android:id="@+id/pw"
@@ -42,7 +44,8 @@
             android:layout_height="wrap_content"
             android:textColor="@color/black"
             android:inputType="textPassword"
-            android:hint="비밀번호" />
+            android:hint="비밀번호"
+            android:backgroundTint="@color/colorAccent" />
 
         <Button
             android:id="@+id/login"
@@ -57,29 +60,23 @@
             android:textColor="@color/black"
             android:fontFamily="@font/notosansmedium"
             android:foreground="?attr/selectableItemBackground"
-            android:background="@drawable/bt_outline"/>
+            android:background="@drawable/button_transition"/>
 
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/myPage"
+    <ProgressBar
+        android:id="@+id/loading"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:indeterminateTint="@color/colorPrimary"
+        android:layout_gravity="center_horizontal"
+        android:visibility="gone"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/myPageView"
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:visibility="gone">
-
-        <TextView
-            android:id="@+id/id_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="회원 아이디"/>
-
-        <TextView
-            android:id="@+id/name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="회원 이름"/>
-
-    </LinearLayout>
+        android:overScrollMode="never"/>
 
 </LinearLayout>

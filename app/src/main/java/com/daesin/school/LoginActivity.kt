@@ -1,83 +1,76 @@
 package com.daesin.school
 
+import android.graphics.drawable.TransitionDrawable
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
+import android.view.View
+import android.webkit.WebSettings
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.text.htmlEncode
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.daesin.school.Util.App
 import com.daesin.school.Util.LoginUtil
-import com.google.gson.JsonParser
+import com.daesin.school.myPage.accountAdapter
+import com.daesin.school.myPage.myPageData
 import kotlinx.android.synthetic.main.actionbar.*
 import kotlinx.android.synthetic.main.activity_login.*
-import kotlinx.coroutines.*
+import kotlinx.android.synthetic.main.activity_login.view.*
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import okhttp3.*
-import okhttp3.HttpUrl.Companion.toHttpUrl
-import org.json.JSONObject
 import org.jsoup.Jsoup
 import java.io.IOException
-import java.lang.IllegalArgumentException
-import java.net.CookieManager
-import java.net.CookiePolicy
-import java.net.URL
 
 
 class LoginActivity : AppCompatActivity() {
+    private lateinit var transitionDrawable :TransitionDrawable
+    private var enable = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.activity_login)
         setSupportActionBar(toolbar)
+
         supportActionBar?.apply {
             setDisplayHomeAsUpEnabled(true)
             setDisplayShowTitleEnabled(false)
             setDisplayShowHomeEnabled(false)
         }
 
-        login.setOnClickListener {
-
-            try {
-                var res = 0
-                runBlocking {
-                    val job = GlobalScope.async(Dispatchers.IO) {
-                        res = LoginUtil.login(id.text.toString(), pw.text.toString())
-                    }
-                    job.await()
-                }
-                Log.d("result", res.toString())
-                if (res == LoginUtil.LOGIN_SUCCESS) {
-                    finish()
-                }
-            } catch (e:IllegalArgumentException) {
-                runOnUiThread { Toast.makeText(applicationContext, e.message, Toast.LENGTH_SHORT).show() }
-            }
+        transitionDrawable = resources.getDrawable(R.drawable.button_transition) as TransitionDrawable
+        textListener()
+        if (App.prefs.getBoolean("login")) {
+            loadMyPage()
         }
 
-        changeSetup()
-
+        login.setOnClickListener {
+            GlobalScope.launch {
+                try {
+                    val res = LoginUtil.login(id.text.toString(), pw.text.toString())
+                    Log.d("LoginResult", res.toString())
+                    if (res == LoginUtil.LOGIN_SUCCESS) {
+                        App.prefs.apply {
+                            setBoolean("login", true)
+                            setString("id", id.text.toString())
+                            setString("pw", pw.text.toString())
+                        }
+                        runOnUiThread {
+                            loadMyPage()
+                        }
+                    }
+                } catch (e:IllegalArgumentException) {
+                    runOnUiThread { Toast.makeText(applicationContext, e.message, Toast.LENGTH_SHORT).show() }
+                }
+            }
+        }
     }
 
+    private fun textListener() {
 
-
-    fun toast(res: Int) {
-        runOnUiThread { Toast.makeText(applicationContext, res, Toast.LENGTH_SHORT).show() }
-    }
-
-    fun buttonDisable() {
-        login.background = resources.getDrawable(R.drawable.bt_outline)
-        login.isEnabled =  false
-        login.setTextColor(resources.getColor(R.color.black))
-    }
-
-    fun buttonEnable() {
-        login.background = resources.getDrawable(R.color.colorPrimary)
-        login.isEnabled =  true
-        login.setTextColor(resources.getColor(R.color.white))
-    }
-
-    private fun changeSetup() {
         id.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
             override fun afterTextChanged(p0: Editable?) {}
@@ -90,6 +83,7 @@ class LoginActivity : AppCompatActivity() {
                 }
             }
         })
+
         pw.addTextChangedListener(object  : TextWatcher {
             override fun afterTextChanged(p0: Editable?) {}
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
@@ -103,5 +97,61 @@ class LoginActivity : AppCompatActivity() {
             }
 
         })
+    }
+
+    private fun loadMyPage() {
+        myPageView.visibility = View.VISIBLE
+        loginForm.visibility = View.GONE
+        loading.visibility = View.VISIBLE
+        val client = OkHttpClient().newBuilder().cookieJar(App.cookieJar).build()
+
+        client.newCall(Request.Builder().url("https://school.busanedu.net/daesin-m/sb/sbscrb/selectSbscrbInfo.do").build()).enqueue(object : Callback {
+            override fun onFailure(call: Call, e: IOException) {
+                TODO("Not yet implemented")
+            }
+            override fun onResponse(call: Call, response: Response) {
+                val res = response.body!!.string()
+                val infoList:ArrayList<myPageData> = arrayListOf()
+                val doc = Jsoup.parse(res).select("#sbscrbInfoForm > fieldset")
+
+                for (tr in doc.select("tr")) {
+                    if (tr.className() != "common_display_none" && !tr.text().contains("비밀번호")) {
+                        //Log.d("ClassName", tr.html())
+                        if (tr.select("td").text().isEmpty()) {
+                            infoList.add(myPageData(tr.select("th").text(),tr.select("input").`val`()))
+                        } else {
+                            infoList.add(myPageData(tr.select("th").text(), tr.select("td").text()))
+                        }
+                    }
+                }
+
+                runOnUiThread {
+                    loading.visibility = View.GONE
+                    myPageView.layoutManager = LinearLayoutManager(applicationContext)
+                    myPageView.adapter = accountAdapter(infoList)
+                }
+            }
+
+        })
+    }
+
+    fun buttonDisable() {
+        if (!enable){
+            login.background = transitionDrawable
+            transitionDrawable.reverseTransition(180)
+            login.isEnabled =  false
+            login.setTextColor(resources.getColor(R.color.black))
+            enable = true
+        }
+    }
+
+    fun buttonEnable() {
+        if (enable) {
+            login.background = transitionDrawable
+            transitionDrawable.startTransition(180)
+            login.isEnabled =  true
+            login.setTextColor(resources.getColor(R.color.white))
+            enable = false
+        }
     }
 }

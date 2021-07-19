@@ -41,6 +41,7 @@ class LetterFragment : Fragment() {
             /**코루틴 상태에서 바로 연결시켜버리면 에러뜸 쓰레드가 필요
              * extensions사용으로 findViewId 해줄필요가 없음
              */
+
             activity?.runOnUiThread {
                 letter_view.layoutManager = LinearLayoutManager(requireContext())
                 letter_view.adapter = LetterAdapater(letterList)

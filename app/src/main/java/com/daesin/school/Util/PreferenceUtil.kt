@@ -106,8 +106,8 @@ class PreferenceUtil(context: Context) {
      *
      * @return
      */
-    fun getString( key: String?): String? {
-        return prefs.getString(key, DEFAULT_VALUE_STRING)
+    fun getString( key: String?): String {
+        return prefs.getString(key, DEFAULT_VALUE_STRING)!!
     }
 
 
