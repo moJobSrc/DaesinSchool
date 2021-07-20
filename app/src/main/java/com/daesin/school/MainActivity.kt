@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.ExpandableListAdapter
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
@@ -89,6 +90,7 @@ class MainActivity : AppCompatActivity() {
         val toggle = ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
         drawerLayout.addDrawerListener(toggle)
         toggle.syncState()
+
         GlobalScope.launch(Dispatchers.IO){
             val client = OkHttpClient.Builder().cookieJar(App.cookieJar).build()
             client.newCall(Request.Builder().url("http://school.busanedu.net/daesin-m/main.do#menuOpen").build()).enqueue(object : Callback {
@@ -99,14 +101,6 @@ class MainActivity : AppCompatActivity() {
                 override fun onResponse(call: Call, response: Response) {
                     val res = response.body!!.string()
                     var html = Jsoup.parse(res).head().html()
-                    html += Jsoup.parse(res).select("#mNavi")
-                    Log.d("HTML", Jsoup.parse(res).select("#mNavi").html())
-                    runOnUiThread {
-                        nav_view.settings.javaScriptEnabled = true
-                        nav_view.settings.domStorageEnabled = true
-                        nav_view.setLayerType(View.LAYER_TYPE_HARDWARE, null)
-                        nav_view.loadDataWithBaseURL("http://school.busanedu.net",html,"text/html", "UTF-8", null)
-                    }
                 }
 
             })
