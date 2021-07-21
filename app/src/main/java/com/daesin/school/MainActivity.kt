@@ -91,19 +91,9 @@ class MainActivity : AppCompatActivity() {
         drawerLayout.addDrawerListener(toggle)
         toggle.syncState()
 
-        GlobalScope.launch(Dispatchers.IO){
-            val client = OkHttpClient.Builder().cookieJar(App.cookieJar).build()
-            client.newCall(Request.Builder().url("http://school.busanedu.net/daesin-m/main.do#menuOpen").build()).enqueue(object : Callback {
-                override fun onFailure(call: Call, e: IOException) {
-                    TODO("Not yet implemented")
-                }
 
-                override fun onResponse(call: Call, response: Response) {
-                    val res = response.body!!.string()
-                    var html = Jsoup.parse(res).head().html()
-                }
-
-            })
+        logout.setOnClickListener {
+            App.prefs.removeKey("login")
         }
 
         val click = View.OnClickListener { v ->

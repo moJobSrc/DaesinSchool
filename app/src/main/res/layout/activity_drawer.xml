@@ -8,6 +8,12 @@
     android:gravity="center_vertical"
     android:orientation="vertical"   >
 
+    <Button
+        android:id="@+id/logout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="LogOut"/>
+
     <LinearLayout
         android:visibility="gone"
         android:layout_width="match_parent"

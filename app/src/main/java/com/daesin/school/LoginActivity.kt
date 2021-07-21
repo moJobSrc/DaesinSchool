@@ -116,12 +116,21 @@ class LoginActivity : AppCompatActivity() {
 
                 for (tr in doc.select("tr")) {
                     if (tr.className() != "common_display_none" && !tr.text().contains("비밀번호")) {
-                        //Log.d("ClassName", tr.html())
-                        if (tr.select("td").text().isEmpty()) {
-                            infoList.add(myPageData(tr.select("th").text(),tr.select("input").`val`()))
+
+                        if (tr.select("td").text().isEmpty() || tr.select("td").select("p").hasClass("mgt10")) {
+                            if (tr.select("input").`val`().isNotEmpty()) {
+                                infoList.add(myPageData(tr.select("th").text(),tr.select("input").`val`()))
+                            }
+                        } else if (tr.select("select").isNotEmpty()) {
+                            for (option in tr.select("select option")) {
+                                if (option.hasAttr("selected")) {
+                                    infoList.add(myPageData(tr.select("th").text(), option.text()))
+                                }
+                            }
                         } else {
                             infoList.add(myPageData(tr.select("th").text(), tr.select("td").text()))
                         }
+
                     }
                 }
 
