@@ -1,82 +1,109 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".LoginActivity"
+    tools:context=".`LoginActivity.kt`"
     android:background="@color/white"
     android:orientation="vertical">
 
-    <include layout="@layout/actionbar" />
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/white"
+        android:theme="@style/ThemeOverlay.AppCompat.Light"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/loginForm"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:visibility="visible">
+        android:visibility="visible"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar">
 
         <ImageView
-            android:layout_marginTop="20dp"
+            android:id="@+id/imageView"
             android:layout_width="140dp"
             android:layout_height="140dp"
             android:layout_gravity="center"
-            android:src="@drawable/dsj_logo1"/>
+            android:src="@drawable/dsj_logo1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <EditText
             android:id="@+id/id"
-            android:layout_marginTop="10dp"
-            android:padding="10dp"
-            android:layout_gravity="center"
             android:layout_width="270dp"
             android:layout_height="wrap_content"
-            android:textColor="@color/black"
+            android:layout_gravity="center"
+            android:backgroundTint="@color/colorAccent"
             android:hint="아이디"
-            android:backgroundTint="@color/colorAccent"/>
+            android:padding="10dp"
+            android:textColor="@color/black"
+            android:layout_marginTop="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageView" />
 
         <EditText
             android:id="@+id/pw"
-            android:layout_marginTop="10dp"
-            android:padding="10dp"
-            android:layout_gravity="center"
             android:layout_width="270dp"
             android:layout_height="wrap_content"
-            android:textColor="@color/black"
-            android:inputType="textPassword"
+            android:layout_gravity="center"
+            android:backgroundTint="@color/colorAccent"
             android:hint="비밀번호"
-            android:backgroundTint="@color/colorAccent" />
+            android:inputType="textPassword"
+            android:padding="10dp"
+            android:textColor="@color/black"
+            android:layout_marginTop="5dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/id" />
 
         <Button
             android:id="@+id/login"
-            android:layout_marginTop="10dp"
-            android:layout_gravity="center"
             android:layout_width="270dp"
             android:layout_height="wrap_content"
-            android:text="LOGIN"
-            android:enabled="false"
+            android:layout_gravity="center"
+            android:background="@drawable/button_transition"
             android:clickable="true"
+            android:enabled="false"
             android:focusable="true"
-            android:textColor="@color/black"
             android:fontFamily="@font/notosansmedium"
             android:foreground="?attr/selectableItemBackground"
-            android:background="@drawable/button_transition"/>
+            android:text="LOGIN"
+            android:textColor="@color/black"
+            android:layout_marginTop="20dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/pw" />
 
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <ProgressBar
         android:id="@+id/loading"
         android:layout_width="48dp"
         android:layout_height="48dp"
-        android:indeterminateTint="@color/colorPrimary"
         android:layout_gravity="center_horizontal"
-        android:visibility="gone"/>
+        android:indeterminateTint="@color/colorPrimary"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/myPageView"
-        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:overScrollMode="never"/>
+        android:overScrollMode="never"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

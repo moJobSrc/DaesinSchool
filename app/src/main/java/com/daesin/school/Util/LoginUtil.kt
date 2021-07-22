@@ -1,6 +1,6 @@
 package com.daesin.school.Util
 
-import com.franmontiel.persistentcookiejar.persistence.SharedPrefsCookiePersistor
+import android.util.Log
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okhttp3.FormBody
@@ -9,7 +9,6 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody
 import org.json.JSONObject
-import java.net.CookieManager
 
 
 object LoginUtil {
@@ -45,7 +44,7 @@ object LoginUtil {
 
         if (response.isSuccessful) {
             val res = response.body!!.string()
-
+            Log.d("LoginResult", res)
             if (JSONObject(res).has("passwordFailrCoCheck") && JSONObject(res).getString("passwordFailrCoCheck") == "N") {
                 throw IllegalArgumentException("비밀번호 5회이상 실패")
             }

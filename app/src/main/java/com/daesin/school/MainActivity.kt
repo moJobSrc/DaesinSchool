@@ -7,7 +7,6 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.ExpandableListAdapter
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
@@ -16,12 +15,7 @@ import com.daesin.school.Util.App
 import kotlinx.android.synthetic.main.actionbar.*
 import kotlinx.android.synthetic.main.activity_drawer.*
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import okhttp3.*
-import org.jsoup.Jsoup
-import java.io.IOException
+import okhttp3.HttpUrl.Companion.toHttpUrl
 
 
 class MainActivity : AppCompatActivity() {
@@ -94,6 +88,10 @@ class MainActivity : AppCompatActivity() {
 
         logout.setOnClickListener {
             App.prefs.removeKey("login")
+            App.cookieJar.clear()
+            App.cookiePrefs.clear()
+            App().makeCookie()
+            Log.d("Cookies", App.cookieJar.loadForRequest(App.MAIN_PAGE.toHttpUrl()).toString())
         }
 
         val click = View.OnClickListener { v ->

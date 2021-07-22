@@ -6,21 +6,18 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.View
-import android.webkit.WebSettings
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.text.htmlEncode
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.daesin.school.Util.App
 import com.daesin.school.Util.LoginUtil
 import com.daesin.school.myPage.accountAdapter
 import com.daesin.school.myPage.myPageData
-import kotlinx.android.synthetic.main.actionbar.*
 import kotlinx.android.synthetic.main.activity_login.*
-import kotlinx.android.synthetic.main.activity_login.view.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import okhttp3.*
+import okhttp3.HttpUrl.Companion.toHttpUrl
 import org.jsoup.Jsoup
 import java.io.IOException
 
@@ -46,12 +43,11 @@ class LoginActivity : AppCompatActivity() {
         if (App.prefs.getBoolean("login")) {
             loadMyPage()
         }
-
+        Log.d("Cookies", App.cookieJar.loadForRequest(App.MAIN_PAGE.toHttpUrl()).toString())
         login.setOnClickListener {
             GlobalScope.launch {
                 try {
                     val res = LoginUtil.login(id.text.toString(), pw.text.toString())
-                    Log.d("LoginResult", res.toString())
                     if (res == LoginUtil.LOGIN_SUCCESS) {
                         App.prefs.apply {
                             setBoolean("login", true)
@@ -147,7 +143,7 @@ class LoginActivity : AppCompatActivity() {
     fun buttonDisable() {
         if (!enable){
             login.background = transitionDrawable
-            transitionDrawable.reverseTransition(180)
+            transitionDrawable.reverseTransition(0)
             login.isEnabled =  false
             login.setTextColor(resources.getColor(R.color.black))
             enable = true
@@ -157,7 +153,7 @@ class LoginActivity : AppCompatActivity() {
     fun buttonEnable() {
         if (enable) {
             login.background = transitionDrawable
-            transitionDrawable.startTransition(180)
+            transitionDrawable.startTransition(0)
             login.isEnabled =  true
             login.setTextColor(resources.getColor(R.color.white))
             enable = false

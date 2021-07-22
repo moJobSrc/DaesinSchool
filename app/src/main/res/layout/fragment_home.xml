@@ -128,6 +128,7 @@
                         <ImageView
                             android:layout_width="40dp"
                             android:layout_height="40dp"
+                            android:padding="4dp"
                             android:src="@drawable/edunet"/>
                         <TextView
                             android:layout_width="wrap_content"
@@ -153,6 +154,7 @@
                         <ImageView
                             android:layout_width="40dp"
                             android:layout_height="40dp"
+                            android:padding="4dp"
                             android:src="@drawable/professor_study"/>
                         <TextView
                             android:layout_width="wrap_content"
