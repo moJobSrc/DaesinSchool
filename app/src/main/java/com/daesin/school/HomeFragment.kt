@@ -26,21 +26,14 @@ class HomeFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_home, container, false)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        //공지사항 클릭 내용변경
-        home_alert.setOnClickListener { recyclerView.adapter = NotiAdapater(notice); change(home_alert) }
-        //가정통신문 클릭
-        letter_alert.setOnClickListener { recyclerView.adapter = NotiAdapater(letter); change(letter_alert) }
-    }
     private fun parse() {
         GlobalScope.launch(Dispatchers.IO) {
             getNotice()
             getLetter()
 
             activity?.runOnUiThread {
-                recyclerView.layoutManager = LinearLayoutManager(requireContext())
-                recyclerView.adapter = NotiAdapater(notice)
+                //recyclerView.layoutManager = LinearLayoutManager(requireContext())
+                //recyclerView.adapter = NotiAdapater(notice)
             }
         }
     }
@@ -73,8 +66,8 @@ class HomeFragment : Fragment() {
 
     //선택했을때 텍스트뷰 컬러변경
     private fun change(textView: TextView) {
-        home_alert.setTextColor(resources.getColor(R.color.grey))
-        letter_alert.setTextColor(resources.getColor(R.color.grey))
+        //home_alert.setTextColor(resources.getColor(R.color.grey))
+        //letter_alert.setTextColor(resources.getColor(R.color.grey))
         textView.setTextColor(resources.getColor(R.color.colorPrimaryDark))
     }
 }
