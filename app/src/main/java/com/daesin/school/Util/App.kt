@@ -27,7 +27,7 @@ class App : Application() {
         cookiePrefs = SharedPrefsCookiePersistor(applicationContext)
         cookieJar = PersistentCookieJar(SetCookieCache(), cookiePrefs)
 
-        makeCookie()
+        //makeCookie()
 
         super.onCreate()
     }

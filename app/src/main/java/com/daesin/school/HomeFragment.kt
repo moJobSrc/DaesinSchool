@@ -28,8 +28,8 @@ class HomeFragment : Fragment() {
 
     private fun parse() {
         GlobalScope.launch(Dispatchers.IO) {
-            getNotice()
-            getLetter()
+            //getNotice()
+            //getLetter()
 
             activity?.runOnUiThread {
                 //recyclerView.layoutManager = LinearLayoutManager(requireContext())

@@ -8,4 +8,5 @@
     <string name="logo">대신중 로고</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="dummyString">2021 2학기 영어듣기평가 일정 및 음원 사이트 안내</string>
 </resources>

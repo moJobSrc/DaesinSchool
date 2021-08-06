@@ -11,8 +11,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.daesin.school.Util.App
 import com.daesin.school.Util.LoginUtil
-import com.daesin.school.myPage.accountAdapter
-import com.daesin.school.myPage.myPageData
 import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -41,7 +39,7 @@ class LoginActivity : AppCompatActivity() {
         transitionDrawable = resources.getDrawable(R.drawable.button_transition) as TransitionDrawable
         textListener()
         if (App.prefs.getBoolean("login")) {
-            loadMyPage()
+            //loadMyPage()
         }
         Log.d("Cookies", App.cookieJar.loadForRequest(App.MAIN_PAGE.toHttpUrl()).toString())
         login.setOnClickListener {
@@ -55,7 +53,7 @@ class LoginActivity : AppCompatActivity() {
                             setString("pw", pw.text.toString())
                         }
                         runOnUiThread {
-                            loadMyPage()
+                            //loadMyPage()
                         }
                     }
                 } catch (e:IllegalArgumentException) {
@@ -89,51 +87,6 @@ class LoginActivity : AppCompatActivity() {
                     buttonDisable()
                 } else if (p0.isNotEmpty() && id.text.toString().isNotEmpty()) {
                     buttonEnable()
-                }
-            }
-
-        })
-    }
-
-    private fun loadMyPage() {
-        myPageView.visibility = View.VISIBLE
-        loginForm.visibility = View.GONE
-        loading.visibility = View.VISIBLE
-        val client = OkHttpClient().newBuilder().cookieJar(App.cookieJar).build()
-
-        client.newCall(Request.Builder().url("https://school.busanedu.net/daesin-m/sb/sbscrb/selectSbscrbInfo.do").build()).enqueue(object : Callback {
-            override fun onFailure(call: Call, e: IOException) {
-                TODO("Not yet implemented")
-            }
-            override fun onResponse(call: Call, response: Response) {
-                val res = response.body!!.string()
-                val infoList:ArrayList<myPageData> = arrayListOf()
-                val doc = Jsoup.parse(res).select("#sbscrbInfoForm > fieldset")
-
-                for (tr in doc.select("tr")) {
-                    if (tr.className() != "common_display_none" && !tr.text().contains("비밀번호")) {
-
-                        if (tr.select("td").text().isEmpty() || tr.select("td").select("p").hasClass("mgt10")) {
-                            if (tr.select("input").`val`().isNotEmpty()) {
-                                infoList.add(myPageData(tr.select("th").text(),tr.select("input").`val`()))
-                            }
-                        } else if (tr.select("select").isNotEmpty()) {
-                            for (option in tr.select("select option")) {
-                                if (option.hasAttr("selected")) {
-                                    infoList.add(myPageData(tr.select("th").text(), option.text()))
-                                }
-                            }
-                        } else {
-                            infoList.add(myPageData(tr.select("th").text(), tr.select("td").text()))
-                        }
-
-                    }
-                }
-
-                runOnUiThread {
-                    loading.visibility = View.GONE
-                    myPageView.layoutManager = LinearLayoutManager(applicationContext)
-                    myPageView.adapter = accountAdapter(infoList)
                 }
             }
 

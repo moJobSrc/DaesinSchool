@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".`LoginActivity.kt`"
+    tools:context=".LoginActivity"
     android:background="@color/white"
     android:orientation="vertical">
 
@@ -74,7 +74,7 @@
             android:clickable="true"
             android:enabled="false"
             android:focusable="true"
-            android:fontFamily="@font/notosansmedium"
+            android:fontFamily="@font/notomedium"
             android:foreground="?attr/selectableItemBackground"
             android:text="LOGIN"
             android:textColor="@color/black"
